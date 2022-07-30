@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  selenoid:
+    container_name: "selenoid_${COMPOSE_PROJECT_NAME}"
+    network_mode: bridge
+    image: aerokube/selenoid:latest-release
+    volumes:
+      - $PWD/selenoid:/etc/selenoid
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $PWD/selenoid_video:/opt/selenoid/video
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/selenoid_video
+    command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10", "-video-output-dir", "/opt/selenoid/video", "-timeout", "120s", "-cpu", "1.5", "-mem", "2.5g"]
+    expose:
+      - 4444
+    ports:
+      - "4444:4444"
+
+  automation-tests:
+    container_name: ${COMPOSE_PROJECT_NAME}
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    network_mode: bridge
+    links:
+      - selenoid
+    volumes:
+        - ./:/app
+    environment:
+      RECORDING: ${RECORDING}
+      CHROME_VERSION: ${CHROME_VERSION}
+
+  selenoid-ui:
+    image: "aerokube/selenoid-ui"
+    network_mode: bridge
+    links:
+      - selenoid
+    ports:
+      - "8080:8080"
+    command: ["--selenoid-uri", "http://selenoid:4444"]
