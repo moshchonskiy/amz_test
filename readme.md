@@ -1,5 +1,7 @@
 ### Installation
 
+* clone this repository
+* go to the folder with cloned repository
 * Install the latest version of Docker CE: https://docs.docker.com/install/
 * Install the latest version of docker-compose: https://docs.docker.com/compose/install/
 * Build test containers `make build`
