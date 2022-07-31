@@ -1,3 +1,5 @@
+from selenium.webdriver.remote.webelement import WebElement
+
 from core.pages.base_page import BasePageObject
 from core.pages.item_page import ItemPage
 from core.elements.base_element import BaseElement
@@ -13,6 +15,10 @@ class AmazonSearch(BasePageObject):
             locator=Locator.xpath_selector('//div[contains(@class, "s-result-item s-asin")]')
         )
 
+    def get_search_item_text(self, s_item: WebElement):
+        text_locator = Locator.xpath_selector('.//div[contains(@class, "s-title-instructions-style")]/h2')
+        return s_item.find_element(text_locator.by).text
+
     @property
     def name_locator(self):
         return Locator.xpath_selector('.//span[@class="a-size-base-plus a-color-base a-text-normal"]')
@@ -23,9 +29,8 @@ class AmazonSearch(BasePageObject):
         return items
 
     def go_to_item_page(self, items: list, index: int = None, title: str = None):
-        if index:
+        if index is not None:
             items[index].click()
-
         elif title:
             for item in items:
                 name = item.find_element(self.name_locator.by, self.name_locator.value).text

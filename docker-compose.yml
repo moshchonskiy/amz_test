@@ -28,6 +28,7 @@ services:
     volumes:
         - ./:/app
     environment:
+      PYTHONPATH: /app
       RECORDING: ${RECORDING}
       CHROME_VERSION: ${CHROME_VERSION}
 

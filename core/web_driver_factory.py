@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
 
 def get_webdriver(
@@ -14,19 +13,16 @@ def get_webdriver(
     """
 
     capabilities = {
+        "enableVNC": True,
         "browserName": browser_type,
         "browserVersion": browser_ver,
         "selenoid:options": {
             "enableVideo": True
         }
     }
-    opts = Options()
-    opts.add_argument('--disable-blink-features=AutomationControlled')
-
     driver = webdriver.Remote(
-        command_executor="http://localhost:4444/wd/hub",
+        command_executor="http://selenoid:4444/wd/hub",
         desired_capabilities=capabilities,
-        options=opts
     )
 
     return driver

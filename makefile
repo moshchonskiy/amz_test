@@ -19,9 +19,9 @@ stop: ## stop containers
 	@docker-compose down -v
 
 .PHONY: test
-test-api: ## run tests
+test: ## run tests
 	@printf "=========Running tests=========\n\n"
-	@docker-compose exec automation-tests sh -c "pytest ."
+	@docker-compose exec automation-tests sh -c "pytest test_amazon.py"
 
 .PHONY: clean
 clean: ## clean reports/logs
